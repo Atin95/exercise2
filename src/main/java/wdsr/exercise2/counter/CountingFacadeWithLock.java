@@ -1,5 +1,8 @@
 package wdsr.exercise2.counter;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Created by Marek on 05.03.2016.
  * 
@@ -10,12 +13,17 @@ public class CountingFacadeWithLock implements CountingFacade {
 	
 	private int invocationCounter;
 	
+	private final Lock lock;
+	
 	public CountingFacadeWithLock(BusinessService businessService) {
 		this.businessService = businessService;
+		lock = new ReentrantLock();
 	}
 		
 	public void countAndInvoke() {
+		lock.lock();
 		invocationCounter++;
+		lock.unlock();
 		businessService.executeAction();
 	}
 	
